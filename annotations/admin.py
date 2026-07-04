@@ -1,3 +1,12 @@
 from django.contrib import admin
+from .models import UploadedImage, Annotation
 
-# Register your models here.
+
+@admin.register(UploadedImage)
+class UploadedImageAdmin(admin.ModelAdmin):
+    list_display = ('id', 'uploaded_by', 'uploaded_at')
+
+
+@admin.register(Annotation)
+class AnnotationAdmin(admin.ModelAdmin):
+    list_display = ('id', 'image', 'label', 'created_at')
