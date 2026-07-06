@@ -32,6 +32,7 @@ urlpatterns = [
 
     # accounts app routes (ping endpoint etc.)
     path('api/accounts/', include('accounts.urls')),
+    path('api/tasks/', include('tasks.urls')),
 ]
 
 if settings.DEBUG:
