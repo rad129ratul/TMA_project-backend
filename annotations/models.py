@@ -21,10 +21,9 @@ class UploadedImage(models.Model):
 class Annotation(models.Model):
     image = models.ForeignKey(
         UploadedImage,
-        on_delete=models.CASCADE,   # Image ডিলিট হলে তার সব annotation ও ডিলিট হবে — orphan রেকর্ড এড়াতে
+        on_delete=models.CASCADE,
         related_name='annotations',
     )
-    # points: normalized (0.0 - 1.0) x,y coordinate pairs, e.g. [{"x": 0.12, "y": 0.34}, ...]
     points = models.JSONField()
     label = models.CharField(max_length=100, blank=True, default='')
     created_at = models.DateTimeField(auto_now_add=True)
