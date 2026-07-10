@@ -3,6 +3,11 @@ from django.conf import settings
 
 
 class UploadedImage(models.Model):
+    task = models.ForeignKey(
+        'tasks.Task',
+        on_delete=models.CASCADE,
+        related_name='images',
+    )
     file = models.ImageField(upload_to='images/')
     uploaded_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
