@@ -20,11 +20,9 @@ class AnnotationListCreateView(generics.ListCreateAPIView):
 
     def get_queryset(self):
         queryset = Annotation.objects.filter(image__uploaded_by=self.request.user)
-
         image_id = self.request.query_params.get("image")
         if image_id:
             queryset = queryset.filter(image_id=image_id)
-
         return queryset
 
     def get_serializer_context(self):
@@ -32,10 +30,17 @@ class AnnotationListCreateView(generics.ListCreateAPIView):
         context["request"] = self.request
         return context
 
-
-class AnnotationDeleteView(generics.DestroyAPIView):
+# RetrieveUpdateDestroyAPIView (GET + PATCH/PUT + DELETE) — to support label editing
+class AnnotationDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = AnnotationSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
+        # ownership filter unchanged — 404 when trying to edit/delete another user's annotation
         return Annotation.objects.filter(image__uploaded_by=self.request.user)
+
+    def get_serializer_context(self):
+        # PATCH also requires request.user in the validate_image() serializer method
+        context = super().get_serializer_context()
+        context["request"] = self.request
+        return context
